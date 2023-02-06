@@ -1,6 +1,7 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import {AbstractDeleteUserService} from "src/domain/users/services/abstract-delete-user.service";
 import {UsersRepository} from "src/infra/db/repositories/users.repository";
+import {NotFoundError} from "src/application/common/errors/types/NotFoundError";
 
 @Injectable()
 export class DeleteUserService implements AbstractDeleteUserService {
@@ -12,7 +13,7 @@ export class DeleteUserService implements AbstractDeleteUserService {
 		const userExists = await this.usersRepository.exists(id)
 
 		if (!userExists) {
-			throw new NotFoundException("Id not found")
+			throw new NotFoundError("Id not found")
 		}
 
 		return await this.usersRepository.delete(id)

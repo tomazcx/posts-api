@@ -11,12 +11,20 @@ export class UsersRepository implements AbstractUserRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
 	public async findAll(): Promise<UserEntity[]> {
-		const users = await this.prisma.user.findMany()
+		const users = await this.prisma.user.findMany({
+			include: {posts: true}
+		})
 		return users
 	}
 
 	public async findById(id: string): Promise<UserEntity | undefined> {
-		const user = await this.prisma.user.findFirst({where: {id}})
+		const user = await this.prisma.user.findFirst({
+			where: {id},
+			include: {
+				posts: true
+			}
+
+		})
 		return user
 	}
 
@@ -32,7 +40,10 @@ export class UsersRepository implements AbstractUserRepository {
 
 	public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
 		const user = await this.prisma.user.create({
-			data: createUserDto
+			data: createUserDto,
+			include: {
+				posts: true
+			}
 		})
 
 		return user
@@ -41,7 +52,11 @@ export class UsersRepository implements AbstractUserRepository {
 	public async update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
 		const user = await this.prisma.user.update({
 			where: {id},
-			data: updateUserDto
+			data: updateUserDto,
+			include: {
+				posts: true
+			}
+
 		})
 
 		return user

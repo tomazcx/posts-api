@@ -1,4 +1,5 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
+import {NotFoundError} from "src/application/common/errors/types/NotFoundError";
 import {UserEntity} from "src/domain/users/entities/user.entity";
 import {AbstractShowUserService} from "src/domain/users/services/abstract-show-user.service";
 import {UsersRepository} from "src/infra/db/repositories/users.repository";
@@ -12,7 +13,7 @@ export class ShowUserService implements AbstractShowUserService {
 		const user = await this.usersRepository.findById(id)
 
 		if (!user) {
-			throw new NotFoundException('User not found')
+			throw new NotFoundError('User not found')
 		}
 
 		return user
